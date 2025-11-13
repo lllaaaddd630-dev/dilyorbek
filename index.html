@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="uz">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -177,7 +178,7 @@
             font-weight: 700;
             color: var(--blue-dark);
             margin-bottom: 1rem;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.1);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
             position: relative;
             display: inline-block;
             animation: textGlow 3s ease-in-out infinite alternate;
@@ -389,7 +390,7 @@
         }
 
         .university-info h2 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: var(--university-red);
             margin-bottom: 0.5rem;
             font-weight: 700;
@@ -413,7 +414,7 @@
             padding: 2rem;
             border-radius: 15px;
             border-left: 4px solid var(--university-red);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
 
@@ -510,7 +511,7 @@
             color: var(--blue);
             font-size: 1.5rem;
             transition: all 0.4s ease;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             text-decoration: none;
         }
 
@@ -527,12 +528,15 @@
                 transform: translateY(-100px) translateX(0) rotate(0deg);
                 opacity: 0;
             }
+
             10% {
                 opacity: 0.8;
             }
+
             90% {
                 opacity: 0.6;
             }
+
             100% {
                 transform: translateY(100vh) translateX(100px) rotate(360deg);
                 opacity: 0;
@@ -544,6 +548,7 @@
                 opacity: 0;
                 transform: translateY(-100px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -555,6 +560,7 @@
                 opacity: 0;
                 transform: translateY(50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -566,6 +572,7 @@
                 opacity: 0;
                 transform: translateX(-100px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -573,9 +580,12 @@
         }
 
         @keyframes float {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0) rotate(0deg);
             }
+
             50% {
                 transform: translateY(-20px) rotate(5deg);
             }
@@ -585,6 +595,7 @@
             from {
                 transform: rotate(0deg);
             }
+
             to {
                 transform: rotate(360deg);
             }
@@ -592,35 +603,45 @@
 
         @keyframes textGlow {
             from {
-                text-shadow: 3px 3px 6px rgba(0,0,0,0.1);
+                text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
             }
+
             to {
                 text-shadow: 3px 3px 15px rgba(74, 144, 226, 0.3);
             }
         }
 
         @keyframes widthPulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: scaleX(1);
             }
+
             50% {
                 transform: scaleX(1.1);
             }
         }
 
         @keyframes pulseGlow {
-            0%, 100% {
+
+            0%,
+            100% {
                 box-shadow: 0 15px 35px rgba(74, 144, 226, 0.5);
             }
+
             50% {
                 box-shadow: 0 15px 45px rgba(74, 144, 226, 0.8);
             }
         }
 
         @keyframes iconBounce {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: scale(1);
             }
+
             50% {
                 transform: scale(1.1);
             }
@@ -630,9 +651,11 @@
             0% {
                 box-shadow: 0 0 0 0 rgba(183, 28, 28, 0.7);
             }
+
             70% {
                 box-shadow: 0 0 0 15px rgba(183, 28, 28, 0);
             }
+
             100% {
                 box-shadow: 0 0 0 0 rgba(183, 28, 28, 0);
             }
@@ -643,39 +666,39 @@
             h1 {
                 font-size: 3rem;
             }
-            
+
             .subtitle {
                 font-size: 1.2rem;
             }
-            
+
             .container {
                 padding: 1rem;
             }
-            
+
             .contact-section {
                 grid-template-columns: 1fr;
             }
-            
+
             .profile-image {
                 width: 160px;
                 height: 160px;
             }
-            
+
             .university-header {
                 flex-direction: column;
                 text-align: center;
             }
-            
+
             .university-logo {
                 width: 100px;
                 height: 100px;
                 font-size: 2.5rem;
             }
-            
+
             .social-links {
                 gap: 1rem;
             }
-            
+
             .social-link {
                 width: 45px;
                 height: 45px;
@@ -684,11 +707,13 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Background Video -->
     <div class="video-background">
         <video autoplay muted loop playsinline>
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-snowfall-in-the-forest-1257-large.mp4" type="video/mp4">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-snowfall-in-the-forest-1257-large.mp4"
+                type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>
@@ -738,7 +763,8 @@
                     <p>@dilyorjonnn</p>
                     <p><small>Yangiliklar va lahzalar uchun kuzatib boring</small></p>
                 </div>
-                <a href="https://www.instagram.com/dilyorjonnn/" target="_blank" rel="noopener noreferrer" class="card-link">
+                <a href="https://www.instagram.com/dilyorjonnn/" target="_blank" rel="noopener noreferrer"
+                    class="card-link">
                     <i class="fab fa-instagram"></i> Profilni ko'rish
                 </a>
             </div>
@@ -787,26 +813,8 @@
                     <p class="faculty">"Iqtisodiyot" fakulteti talabasi</p>
                 </div>
             </div>
+
             
-            <div class="university-details">
-                <div class="detail-card">
-                    <h3><i class="fas fa-graduation-cap"></i> Ta'lim Ma'lumotlari</h3>
-                    <p><strong>Universitet:</strong> Toshkent Davlat Iqtisodiyot Universiteti (TDIU)</p>
-                    <p><strong>Fakultet:</strong> Iqtisodiyot fakulteti</p>
-                    <p><strong>Daraja:</strong> Bakalavr</p>
-                    <p><strong>Yo'nalish:</strong> Iqtisodiyot</p>
-                </div>
-                
-                <div class="detail-card">
-                    <h3><i class="fas fa-book-open"></i> O'qish Tajribasi</h3>
-                    <p>O'zbekistonning yetakchi iqtisodiyot universitetida ta'lim olmoqda. Zamonaviy iqtisodiy bilimlar va amaliy ko'nikmalarni egallab bormoqda.</p>
-                </div>
-                
-                <div class="detail-card">
-                    <h3><i class="fas fa-rocket"></i> Maqsad va Rejalar</h3>
-                    <p>Iqtisodiy bilimlar bilan texnologiyalarni uyg'unlashtirib, kelajakda O'zbekiston iqtisodiyotiga hissa qo'shish niyatida.</p>
-                </div>
-            </div>
         </section>
 
         <section class="birthday-section">
@@ -839,35 +847,35 @@
         function initSnow() {
             const snowContainer = document.getElementById('snow-container');
             const snowflakeCount = 100;
-            
+
             for (let i = 0; i < snowflakeCount; i++) {
                 createSnowflake();
             }
-            
+
             function createSnowflake() {
                 const snowflake = document.createElement('div');
                 snowflake.classList.add('snowflake');
-                
+
                 const size = 2 + Math.random() * 8;
                 snowflake.style.width = `${size}px`;
                 snowflake.style.height = `${size}px`;
-                
+
                 const startX = Math.random() * 100;
                 snowflake.style.left = `${startX}vw`;
-                
+
                 const opacity = 0.3 + Math.random() * 0.7;
                 snowflake.style.opacity = opacity;
-                
+
                 const blur = 0.5 + Math.random() * 1.5;
                 snowflake.style.filter = `blur(${blur}px)`;
-                
+
                 const duration = 8 + Math.random() * 12;
                 const delay = Math.random() * 5;
                 snowflake.style.animationDuration = `${duration}s`;
                 snowflake.style.animationDelay = `${delay}s`;
-                
+
                 snowContainer.appendChild(snowflake);
-                
+
                 setTimeout(() => {
                     if (snowflake.parentNode) {
                         snowflake.remove();
@@ -878,9 +886,10 @@
         }
 
         // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             initSnow();
         });
     </script>
 </body>
+
 </html>
