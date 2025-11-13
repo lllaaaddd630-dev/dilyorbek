@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dilyorbek - Tug'ilgan kuni</title>
+    <title>Dilyorbek - Tug'ilgan Kuni</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -11,13 +11,35 @@
     <style>
         :root {
             --white: #FFFFFF;
-            --gold: #cfa84a;
-            --gold-light: #ffd27a;
-            --gold-dark: #b8943a;
-            --autumn-brown: #8B4513;
-            --autumn-orange: #D2691E;
-            --autumn-red: #A52A2A;
-            --shadow: rgba(207, 168, 74, 0.15);
+            --blue: #4A90E2;
+            --blue-light: #87CEEB;
+            --blue-dark: #2C5AA0;
+            --silver: #E8F4F8;
+            --ice: #F0F8FF;
+            --gold: #FFD700;
+            --shadow: rgba(74, 144, 226, 0.15);
+            --winter-blue: #1E3A8A;
+            --winter-silver: #E2E8F0;
+        }
+
+        /* Scroll bar styles */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: linear-gradient(135deg, #E8F4F8 0%, #F0F8FF 100%);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            border-radius: 10px;
+            border: 2px solid #E8F4F8;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--blue-dark), var(--blue));
         }
 
         * {
@@ -28,8 +50,8 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #fef9e7 0%, #fff9e6 100%);
-            color: #333;
+            background: linear-gradient(135deg, #E8F4F8 0%, #F0F8FF 50%, #E6F3FF 100%);
+            color: #2C5AA0;
             line-height: 1.6;
             overflow-x: hidden;
             position: relative;
@@ -55,10 +77,10 @@
             min-height: 100%;
             object-fit: cover;
             opacity: 0.15;
-            filter: sepia(0.4) brightness(1.05);
+            filter: brightness(1.1) contrast(0.9);
         }
 
-        .fallback-leaves {
+        .snow-container {
             position: fixed;
             top: 0;
             left: 0;
@@ -68,19 +90,50 @@
             pointer-events: none;
         }
 
-        .leaf {
+        .snowflake {
             position: absolute;
-            width: 25px;
-            height: 25px;
-            background: linear-gradient(135deg, var(--gold), var(--autumn-orange));
-            border-radius: 50% 0 50% 0;
-            opacity: 0.7;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            filter: blur(1px);
+            animation: snowFall 8s linear infinite;
+        }
+
+        .snowflake:nth-child(odd) {
+            animation-duration: 10s;
+            animation-delay: 1s;
+        }
+
+        .snowflake:nth-child(even) {
+            animation-duration: 12s;
+            animation-delay: 2s;
+        }
+
+        .snowflake:nth-child(3n) {
+            animation-duration: 14s;
+            animation-delay: 3s;
+        }
+
+        .ice-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
             z-index: -1;
-            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.1));
+        }
+
+        .ice-crystal {
+            position: absolute;
+            font-size: 2rem;
+            color: var(--blue-light);
+            opacity: 0.1;
+            animation: floatIce 15s infinite linear;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
             text-align: center;
             animation: fadeInUp 1s ease-out;
@@ -88,11 +141,11 @@
 
         .birthday-card {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 25px;
-            padding: 3rem;
-            box-shadow: 0 20px 50px rgba(207, 168, 74, 0.25);
-            border: 2px solid rgba(207, 168, 74, 0.1);
-            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 4rem 3rem;
+            box-shadow: 0 25px 60px rgba(74, 144, 226, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
             position: relative;
             overflow: hidden;
         }
@@ -104,30 +157,61 @@
             left: 0;
             width: 100%;
             height: 8px;
-            background: linear-gradient(to right, var(--gold), var(--autumn-orange), var(--gold));
+            background: linear-gradient(to right, var(--blue-light), var(--blue), var(--blue-dark), var(--blue), var(--blue-light));
         }
 
-        .cake-icon {
+        /* PROFILE IMAGE - Rasim to'g'ri joylashgan */
+        .profile-image {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 20px 40px rgba(74, 144, 226, 0.4);
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, var(--blue-light), var(--blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
             font-size: 4rem;
-            color: var(--gold);
+            animation: bounce 3s ease-in-out infinite;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .birthday-icon {
+            font-size: 5rem;
+            color: var(--blue);
             margin-bottom: 1.5rem;
             animation: bounce 2s infinite;
             filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+            display: block;
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 700;
-            color: var(--gold);
+            color: var(--blue-dark);
             margin-bottom: 1rem;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .birthday-date {
-            font-size: 1.4rem;
-            color: var(--autumn-brown);
+            font-size: 1.6rem;
+            color: var(--blue);
             margin-bottom: 3rem;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .countdown-section {
@@ -135,10 +219,10 @@
         }
 
         .countdown-title {
-            font-size: 1.3rem;
-            color: var(--autumn-brown);
-            margin-bottom: 1.5rem;
-            font-weight: 500;
+            font-size: 1.5rem;
+            color: var(--blue-dark);
+            margin-bottom: 2rem;
+            font-weight: 600;
         }
 
         .countdown {
@@ -150,84 +234,82 @@
         }
 
         .countdown-item {
-            background: linear-gradient(135deg, var(--gold-light), var(--gold));
-            border-radius: 15px;
-            padding: 1.5rem 1rem;
-            min-width: 100px;
-            box-shadow: 0 10px 25px rgba(207, 168, 74, 0.3);
+            background: linear-gradient(135deg, var(--blue-light), var(--blue));
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            min-width: 120px;
+            box-shadow: 0 15px 35px rgba(74, 144, 226, 0.4);
             color: white;
             position: relative;
             overflow: hidden;
             animation: pulse 2s infinite;
+            border: 3px solid rgba(255, 255, 255, 0.5);
         }
 
         .countdown-number {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
 
         .countdown-label {
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: 1rem;
+            font-weight: 600;
             opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .days-left {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 700;
-            color: var(--gold);
+            color: var(--blue);
             margin: 2rem 0;
-            padding: 1rem;
-            background: rgba(207, 168, 74, 0.1);
-            border-radius: 15px;
-            border: 2px dashed var(--gold);
+            padding: 1.5rem;
+            background: rgba(74, 144, 226, 0.1);
+            border-radius: 20px;
+            border: 3px dashed var(--blue);
         }
 
         .next-birthday {
-            font-size: 1.2rem;
-            color: var(--autumn-brown);
+            font-size: 1.3rem;
+            color: var(--blue-dark);
             margin-bottom: 2rem;
+            font-weight: 500;
         }
 
         .home-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            padding: 1.5rem 3rem;
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
             border: none;
-            border-radius: 50px;
+            border-radius: 60px;
             color: white;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 25px rgba(207, 168, 74, 0.4);
-            font-size: 1.1rem;
+            transition: all 0.5s ease;
+            box-shadow: 0 15px 35px rgba(74, 144, 226, 0.5);
+            font-size: 1.2rem;
             text-decoration: none;
+            animation: pulseGlow 2s ease-in-out infinite;
             margin-top: 1rem;
         }
 
         .home-btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 15px 35px rgba(207, 168, 74, 0.5);
+            transform: translateY(-10px) scale(1.08);
+            box-shadow: 0 25px 50px rgba(74, 144, 226, 0.7);
+            animation: none;
         }
 
         .home-btn i {
-            margin-right: 0.7rem;
+            margin-right: 1rem;
+            font-size: 1.5rem;
         }
 
-        .confetti {
-            position: fixed;
-            width: 15px;
-            height: 15px;
-            background: var(--gold);
-            opacity: 0;
-            z-index: 1000;
-            pointer-events: none;
-        }
-
+        /* Animatsiyalar */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -254,45 +336,57 @@
         @keyframes pulse {
             0% {
                 transform: scale(1);
-                box-shadow: 0 10px 25px rgba(207, 168, 74, 0.3);
+                box-shadow: 0 15px 35px rgba(74, 144, 226, 0.4);
             }
             50% {
                 transform: scale(1.05);
-                box-shadow: 0 15px 30px rgba(207, 168, 74, 0.4);
+                box-shadow: 0 20px 40px rgba(74, 144, 226, 0.6);
             }
             100% {
                 transform: scale(1);
-                box-shadow: 0 10px 25px rgba(207, 168, 74, 0.3);
+                box-shadow: 0 15px 35px rgba(74, 144, 226, 0.4);
             }
         }
 
-        @keyframes fall {
-            0% {
-                transform: translateY(-100px) rotate(0deg) translateX(0px);
-                opacity: 0.8;
-            }
-            25% {
-                transform: translateY(25vh) rotate(90deg) translateX(var(--sway));
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 15px 35px rgba(74, 144, 226, 0.5);
             }
             50% {
-                transform: translateY(50vh) rotate(180deg) translateX(calc(var(--sway) * -1));
+                box-shadow: 0 15px 45px rgba(74, 144, 226, 0.8);
             }
-            75% {
-                transform: translateY(75vh) rotate(270deg) translateX(var(--sway));
+        }
+
+        @keyframes snowFall {
+            0% {
+                transform: translateY(-100px) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.6;
             }
             100% {
-                transform: translateY(100vh) rotate(360deg) translateX(calc(var(--sway) * -1));
+                transform: translateY(100vh) translateX(100px) rotate(360deg);
                 opacity: 0;
             }
         }
 
-        @keyframes confettiFall {
+        @keyframes floatIce {
             0% {
-                transform: translateY(-100px) rotate(0deg);
-                opacity: 1;
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.05;
             }
             100% {
-                transform: translateY(100vh) rotate(360deg);
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
                 opacity: 0;
             }
         }
@@ -304,11 +398,16 @@
             }
             
             .birthday-card {
-                padding: 2rem 1.5rem;
+                padding: 3rem 2rem;
             }
             
             h1 {
-                font-size: 2.2rem;
+                font-size: 2.5rem;
+            }
+            
+            .profile-image {
+                width: 140px;
+                height: 140px;
             }
             
             .countdown {
@@ -316,16 +415,16 @@
             }
             
             .countdown-item {
-                min-width: 80px;
-                padding: 1rem 0.5rem;
+                min-width: 90px;
+                padding: 1.5rem 1rem;
             }
             
             .countdown-number {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             
             .days-left {
-                font-size: 1.4rem;
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -334,21 +433,26 @@
     <!-- Background Video -->
     <div class="video-background">
         <video autoplay muted loop playsinline>
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-autumn-leaves-falling-from-trees-1082-large.mp4" type="video/mp4">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-snowfall-in-the-forest-1257-large.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>
 
-    <!-- Fallback Leaves Animation -->
-    <div class="fallback-leaves" id="leaves-container"></div>
+    <!-- Snow Animation -->
+    <div class="snow-container" id="snow-container"></div>
 
-    <!-- Confetti Container -->
-    <div id="confetti-container"></div>
+    <!-- Ice Crystals -->
+    <div class="ice-container" id="ice-container"></div>
 
     <div class="container">
         <div class="birthday-card">
-            <div class="cake-icon">
-                <i class="fas fa-birthday-cake"></i>
+            <!-- PROFILE IMAGE - Rasim to'g'ri joylashgan -->
+            <div class="profile-image">
+                <img src="dilyorbek.jpg" alt="Dilyorbek">
+            </div>
+            
+            <div class="birthday-icon">
+                <i class="fas fa-snowflake"></i>
             </div>
             
             <h1>Dilyorbek</h1>
@@ -377,7 +481,7 @@
                 </div>
                 
                 <div class="days-left" id="total-days">
-                    Jami kunlar: hisoblanmoqda...
+                    Keyingi tug'ilgan kunigacha: hisoblanmoqda...
                 </div>
                 
                 <p class="next-birthday" id="next-birthday">
@@ -392,53 +496,75 @@
     </div>
 
     <script>
-        // Optimized leaf animation
-        function initLeaves() {
-            const leavesContainer = document.getElementById('leaves-container');
-            const leafCount = 20;
+        // Snow animation
+        function initSnow() {
+            const snowContainer = document.getElementById('snow-container');
+            const snowflakeCount = 100;
             
-            // Create all leaves initially
-            for (let i = 0; i < leafCount; i++) {
-                createLeaf();
+            for (let i = 0; i < snowflakeCount; i++) {
+                createSnowflake();
             }
             
-            function createLeaf() {
-                const leaf = document.createElement('div');
-                leaf.classList.add('leaf');
+            function createSnowflake() {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
                 
-                // Random position
-                const leftPos = Math.random() * 100;
-                leaf.style.left = `${leftPos}vw`;
+                const size = 2 + Math.random() * 8;
+                snowflake.style.width = `${size}px`;
+                snowflake.style.height = `${size}px`;
                 
-                // Random size
-                const size = 15 + Math.random() * 20;
-                leaf.style.width = `${size}px`;
-                leaf.style.height = `${size}px`;
+                const startX = Math.random() * 100;
+                snowflake.style.left = `${startX}vw`;
                 
-                // Random color variation
-                const hue = 30 + Math.random() * 40;
-                const saturation = 60 + Math.random() * 30;
-                const lightness = 35 + Math.random() * 25;
-                leaf.style.background = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+                const opacity = 0.3 + Math.random() * 0.7;
+                snowflake.style.opacity = opacity;
                 
-                // Random animation
+                const blur = 0.5 + Math.random() * 1.5;
+                snowflake.style.filter = `blur(${blur}px)`;
+                
                 const duration = 8 + Math.random() * 12;
                 const delay = Math.random() * 5;
-                const sway = 15 + Math.random() * 45;
-                leaf.style.setProperty('--sway', `${sway}px`);
-                leaf.style.animation = `fall ${duration}s linear ${delay}s infinite`;
+                snowflake.style.animationDuration = `${duration}s`;
+                snowflake.style.animationDelay = `${delay}s`;
                 
-                leavesContainer.appendChild(leaf);
+                snowContainer.appendChild(snowflake);
                 
-                // Reuse leaf instead of recreating
-                leaf.addEventListener('animationiteration', function() {
-                    // Reset position for next iteration
-                    leaf.style.left = `${Math.random() * 100}vw`;
-                });
+                setTimeout(() => {
+                    if (snowflake.parentNode) {
+                        snowflake.remove();
+                        createSnowflake();
+                    }
+                }, (duration + delay) * 1000);
             }
         }
 
-        // Improved countdown with better precision
+        // Ice crystals animation
+        function initIceCrystals() {
+            const iceContainer = document.getElementById('ice-container');
+            const crystalCount = 6;
+            const crystals = ['❄️', '🧊', '⛄', '🌨️', '🏔️', '🎿'];
+            
+            for (let i = 0; i < crystalCount; i++) {
+                createIceCrystal();
+            }
+            
+            function createIceCrystal() {
+                const crystal = document.createElement('div');
+                crystal.classList.add('ice-crystal');
+                crystal.textContent = crystals[Math.floor(Math.random() * crystals.length)];
+                
+                const leftPos = 5 + Math.random() * 90;
+                crystal.style.left = `${leftPos}%`;
+                
+                const duration = 20 + Math.random() * 20;
+                const delay = Math.random() * 15;
+                crystal.style.animation = `floatIce ${duration}s linear ${delay}s infinite`;
+                
+                iceContainer.appendChild(crystal);
+            }
+        }
+
+        // Birthday countdown
         function updateCountdown() {
             const now = new Date();
             const currentYear = now.getFullYear();
@@ -472,61 +598,14 @@
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('next-birthday').textContent = 
                 `Keyingi tug'ilgan kun: ${nextBirthday.toLocaleDateString('uz-UZ', options)}`;
-            
-            // Create confetti when it's close to birthday
-            if (days === 0 && hours < 24) {
-                createConfetti();
-            }
-        }
-        
-        // Create confetti effect
-        function createConfetti() {
-            const confettiContainer = document.getElementById('confetti-container');
-            const confettiCount = 30;
-            
-            for (let i = 0; i < confettiCount; i++) {
-                const confetti = document.createElement('div');
-                confetti.classList.add('confetti');
-                
-                // Random position
-                confetti.style.left = Math.random() * 100 + 'vw';
-                
-                // Random size
-                const size = 5 + Math.random() * 10;
-                confetti.style.width = size + 'px';
-                confetti.style.height = size + 'px';
-                
-                // Random color
-                const colors = ['#cfa84a', '#ffd27a', '#D2691E', '#A52A2A', '#8B4513'];
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                
-                // Random shape
-                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-                
-                // Random animation
-                const duration = 1 + Math.random() * 2;
-                const delay = Math.random() * 2;
-                confetti.style.animation = `confettiFall ${duration}s linear ${delay}s forwards`;
-                
-                confettiContainer.appendChild(confetti);
-                
-                // Remove confetti after animation
-                setTimeout(() => {
-                    if (confetti.parentNode) {
-                        confetti.remove();
-                    }
-                }, (duration + delay) * 1000);
-            }
         }
 
         // Initialize everything when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            initLeaves();
+            initSnow();
+            initIceCrystals();
             updateCountdown();
             setInterval(updateCountdown, 1000);
-            
-            // Create confetti periodically for effect
-            setInterval(createConfetti, 10000);
         });
     </script>
 </body>
