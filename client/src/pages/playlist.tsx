@@ -12,6 +12,11 @@ export default function Playlist() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
+  const [volume, setVolume] = useState(() => {
+    const saved = localStorage.getItem("musicPlayerVolume");
+    return saved ? parseFloat(saved) : 1;
+  });
+  const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Fetch playlist data
@@ -27,6 +32,7 @@ export default function Playlist() {
     audioRef.current = new Audio();
     
     const audio = audioRef.current;
+    audio.volume = volume;
 
     const handleTimeUpdate = () => {
       if (audio.duration) {
@@ -63,6 +69,25 @@ export default function Playlist() {
       }
     }
   }, [currentSong]);
+
+  // Update audio volume when volume or mute state changes
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = isMuted ? 0 : volume;
+    }
+  }, [volume, isMuted]);
+
+  const handleVolumeChange = (newVolume: number) => {
+    setVolume(newVolume);
+    localStorage.setItem("musicPlayerVolume", newVolume.toString());
+    if (isMuted && newVolume > 0) {
+      setIsMuted(false);
+    }
+  };
+
+  const handleMuteToggle = () => {
+    setIsMuted(!isMuted);
+  };
 
   const handlePlayPause = (index?: number) => {
     if (index !== undefined) {
@@ -235,10 +260,14 @@ export default function Playlist() {
             isPlaying={isPlaying}
             progress={progress}
             currentTime={currentTime}
+            volume={volume}
+            isMuted={isMuted}
             onPlayPause={() => handlePlayPause()}
             onNext={handleNext}
             onPrevious={handlePrevious}
             onProgressClick={handleProgressClick}
+            onVolumeChange={handleVolumeChange}
+            onMuteToggle={handleMuteToggle}
           />
         </div>
       </div>

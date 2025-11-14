@@ -1,6 +1,7 @@
-import { Play, Pause, SkipBack, SkipForward, Music } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Music, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
 import type { Song } from "@shared/schema";
 
 interface MusicPlayerProps {
@@ -8,10 +9,14 @@ interface MusicPlayerProps {
   isPlaying: boolean;
   progress: number;
   currentTime: number;
+  volume: number;
+  isMuted: boolean;
   onPlayPause: () => void;
   onNext: () => void;
   onPrevious: () => void;
   onProgressClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onVolumeChange: (volume: number) => void;
+  onMuteToggle: () => void;
 }
 
 export function MusicPlayer({
@@ -19,10 +24,14 @@ export function MusicPlayer({
   isPlaying,
   progress,
   currentTime,
+  volume,
+  isMuted,
   onPlayPause,
   onNext,
   onPrevious,
   onProgressClick,
+  onVolumeChange,
+  onMuteToggle,
 }: MusicPlayerProps) {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -124,11 +133,37 @@ export function MusicPlayer({
             data-testid="progress-bar-main-fill"
           />
         </div>
-        <div className="flex justify-between text-sm text-muted-foreground">
-          <span data-testid="text-player-current-time">
+        <div className="flex justify-between items-center text-sm text-muted-foreground gap-4 flex-wrap md:flex-nowrap">
+          <span data-testid="text-player-current-time" className="flex-shrink-0">
             {formatTime(currentTime)}
           </span>
-          <span data-testid="text-player-duration">
+          
+          {/* Volume Control */}
+          <div className="flex items-center gap-2 flex-1 max-w-[200px] min-w-[120px]">
+            <Button
+              size="icon"
+              variant="ghost"
+              className="flex-shrink-0"
+              onClick={onMuteToggle}
+              data-testid="button-mute-toggle"
+            >
+              {isMuted || volume === 0 ? (
+                <VolumeX className="w-4 h-4" data-testid="icon-volume-muted" />
+              ) : (
+                <Volume2 className="w-4 h-4" data-testid="icon-volume-on" />
+              )}
+            </Button>
+            <Slider
+              value={[volume * 100]}
+              max={100}
+              step={1}
+              onValueChange={(values) => onVolumeChange(values[0] / 100)}
+              className="flex-1"
+              data-testid="slider-volume"
+            />
+          </div>
+          
+          <span data-testid="text-player-duration" className="flex-shrink-0">
             {currentSong ? formatTime(currentSong.duration) : "0:00"}
           </span>
         </div>

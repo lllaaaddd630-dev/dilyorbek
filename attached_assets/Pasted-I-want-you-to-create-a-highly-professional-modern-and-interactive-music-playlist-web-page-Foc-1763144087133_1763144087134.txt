@@ -1,0 +1,49 @@
+I want you to create a **highly professional, modern, and interactive music playlist web page**. Focus **only on frontend design and user experience**, not backend. Follow these detailed requirements:
+
+1. **Layout & Style**:
+   - Inspired by Spotify, Apple Music, or other premium music apps.
+   - Clean, minimal, yet vibrant interface.
+   - Dark/light mode toggle is optional but a plus.
+   - Use smooth gradients, shadows, and subtle animations for a premium feel.
+   - Responsive design: works perfectly on desktop, tablet, and mobile.
+
+2. **Playlist Section**:
+   - Display **10–15 songs** in a list or grid.
+   - Each song block should show:
+     - Album cover (circular or square)
+     - Song name
+     - Artist name
+     - Play/Pause button with hover effect
+     - Progress bar for the song (placeholder)
+     - Optional: Like/favorite heart icon
+   - Highlight the currently playing song visually.
+   - Smooth hover and click animations.
+
+3. **Media Player**:
+   - Fixed at bottom or top, modern style.
+   - Show song title, artist, album cover.
+   - Play, Pause, Next, Previous, Shuffle, and Repeat buttons.
+   - Progress bar with draggable slider.
+   - Volume control with a slider.
+   - Subtle animations on button interactions.
+
+4. **Typography & Colors**:
+   - Use modern sans-serif fonts (like Inter, Poppins, or Roboto).
+   - Elegant color palette (e.g., dark theme: dark gray, teal, purple accents; light theme: white, blue, gold accents).
+   - Smooth gradients and subtle shadows for depth.
+
+5. **Interactive Animations**:
+   - Smooth transitions on hover, clicks, and progress bar updates.
+   - Subtle glow or pulse effect on the currently playing song or button.
+   - Optional: animated background (like moving gradient, particle effect, or subtle waves).
+
+6. **Technical Requirements**:
+   - Use **HTML, CSS (or SCSS), and JavaScript** only.
+   - Use **CSS Flexbox/Grid** for layout.
+   - Fully responsive: works on all screen sizes.
+   - Include placeholder album images and dummy song titles for testing.
+   - Keep the code clean, commented, and modular for easy updates.
+
+7. **Goal**:
+   - Deliver a **ready-to-use, highly professional music app frontend** that looks like a premium music streaming platform.
+   - The design should **feel interactive, polished, and user-friendly**.
