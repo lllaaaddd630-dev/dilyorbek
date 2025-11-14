@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dilyorbek - Tug'ilgan Kuni</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --blue: #4A90E2;
+            --blue-light: #87CEEB;
+            --blue-dark: #2C5AA0;
+            --silver: #E8F4F8;
+            --ice: #F0F8FF;
+            --gold: #FFD700;
+            --shadow: rgba(74, 144, 226, 0.15);
+            --winter-blue: #1E3A8A;
+            --winter-silver: #E2E8F0;
+        }
+
+        /* Scroll bar styles */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: linear-gradient(135deg, #E8F4F8 0%, #F0F8FF 100%);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            border-radius: 10px;
+            border: 2px solid #E8F4F8;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #E8F4F8 0%, #F0F8FF 50%, #E6F3FF 100%);
+            color: #2C5AA0;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .video-background video {
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+            opacity: 0.15;
+            filter: brightness(1.1) contrast(0.9);
+        }
+
+        .snow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .snowflake {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            filter: blur(1px);
+            animation: snowFall 8s linear infinite;
+        }
+
+        .snowflake:nth-child(odd) {
+            animation-duration: 10s;
+            animation-delay: 1s;
+        }
+
+        .snowflake:nth-child(even) {
+            animation-duration: 12s;
+            animation-delay: 2s;
+        }
+
+        .snowflake:nth-child(3n) {
+            animation-duration: 14s;
+            animation-delay: 3s;
+        }
+
+        .ice-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .ice-crystal {
+            position: absolute;
+            font-size: 2rem;
+            color: var(--blue-light);
+            opacity: 0.1;
+            animation: floatIce 15s infinite linear;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .birthday-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 4rem 3rem;
+            box-shadow: 0 25px 60px rgba(74, 144, 226, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .birthday-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(to right, var(--blue-light), var(--blue), var(--blue-dark), var(--blue), var(--blue-light));
+        }
+
+        /* PROFILE IMAGE - Rasim to'g'ri joylashgan */
+        .profile-image {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 20px 40px rgba(74, 144, 226, 0.4);
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, var(--blue-light), var(--blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+            animation: bounce 3s ease-in-out infinite;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .birthday-icon {
+            font-size: 5rem;
+            color: var(--blue);
+            margin-bottom: 1.5rem;
+            animation: bounce 2s infinite;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+            display: block;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--blue-dark);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .birthday-date {
+            font-size: 1.6rem;
+            color: var(--blue);
+            margin-bottom: 3rem;
+            font-weight: 600;
+        }
+
+        .countdown-section {
+            margin: 3rem 0;
+        }
+
+        .countdown-title {
+            font-size: 1.5rem;
+            color: var(--blue-dark);
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            background: linear-gradient(135deg, var(--blue-light), var(--blue));
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            min-width: 120px;
+            box-shadow: 0 15px 35px rgba(74, 144, 226, 0.4);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .countdown-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .countdown-label {
+            font-size: 1rem;
+            font-weight: 600;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .days-left {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--blue);
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(74, 144, 226, 0.1);
+            border-radius: 20px;
+            border: 3px dashed var(--blue);
+        }
+
+        .next-birthday {
+            font-size: 1.3rem;
+            color: var(--blue-dark);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .home-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem 3rem;
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            border: none;
+            border-radius: 60px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            box-shadow: 0 15px 35px rgba(74, 144, 226, 0.5);
+            font-size: 1.2rem;
+            text-decoration: none;
+            animation: pulseGlow 2s ease-in-out infinite;
+            margin-top: 1rem;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-10px) scale(1.08);
+            box-shadow: 0 25px 50px rgba(74, 144, 226, 0.7);
+            animation: none;
+        }
+
+        .home-btn i {
+            margin-right: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Animatsiyalar */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 15px 35px rgba(74, 144, 226, 0.4);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 20px 40px rgba(74, 144, 226, 0.6);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 15px 35px rgba(74, 144, 226, 0.4);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 15px 35px rgba(74, 144, 226, 0.5);
+            }
+            50% {
+                box-shadow: 0 15px 45px rgba(74, 144, 226, 0.8);
+            }
+        }
+
+        @keyframes snowFall {
+            0% {
+                transform: translateY(-100px) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(100vh) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatIce {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.05;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .birthday-card {
+                padding: 3rem 2rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .profile-image {
+                width: 140px;
+                height: 140px;
+            }
+            
+            .countdown {
+                gap: 1rem;
+            }
+            
+            .countdown-item {
+                min-width: 90px;
+                padding: 1.5rem 1rem;
+            }
+            
+            .countdown-number {
+                font-size: 2.2rem;
+            }
+            
+            .days-left {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Video -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-snowfall-in-the-forest-1257-large.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <!-- Snow Animation -->
+    <div class="snow-container" id="snow-container"></div>
+
+    <!-- Ice Crystals -->
+    <div class="ice-container" id="ice-container"></div>
+
+    <div class="container">
+        <div class="birthday-card">
+            <!-- PROFILE IMAGE - Rasim to'g'ri joylashgan -->
+            <div class="profile-image">
+                <img src="dilyorbek.png" alt="Dilyorbek">
+            </div>
+            
+            <div class="birthday-icon">
+                <i class="fas fa-snowflake"></i>
+            </div>
+            
+            <h1>Dilyorbek</h1>
+            <p class="birthday-date">Tug'ilgan kuni: 8-dekabr</p>
+            
+            <div class="countdown-section">
+                <h2 class="countdown-title">Keyingi tug'ilgan kungacha qolgan vaqt:</h2>
+                
+                <div class="countdown">
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="days">0</div>
+                        <div class="countdown-label">Kun</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="hours">0</div>
+                        <div class="countdown-label">Soat</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="minutes">0</div>
+                        <div class="countdown-label">Daqiqa</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="seconds">0</div>
+                        <div class="countdown-label">Soniya</div>
+                    </div>
+                </div>
+                
+                <div class="days-left" id="total-days">
+                    Keyingi tug'ilgan kunigacha: hisoblanmoqda...
+                </div>
+                
+                <p class="next-birthday" id="next-birthday">
+                    Keyingi tug'ilgan kun: hisoblanmoqda...
+                </p>
+            </div>
+            
+            <a href="index.html" class="home-btn">
+                <i class="fas fa-home"></i> Asosiy sahifaga qaytish
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Snow animation
+        function initSnow() {
+            const snowContainer = document.getElementById('snow-container');
+            const snowflakeCount = 100;
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                createSnowflake();
+            }
+            
+            function createSnowflake() {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                
+                const size = 2 + Math.random() * 8;
+                snowflake.style.width = `${size}px`;
+                snowflake.style.height = `${size}px`;
+                
+                const startX = Math.random() * 100;
+                snowflake.style.left = `${startX}vw`;
+                
+                const opacity = 0.3 + Math.random() * 0.7;
+                snowflake.style.opacity = opacity;
+                
+                const blur = 0.5 + Math.random() * 1.5;
+                snowflake.style.filter = `blur(${blur}px)`;
+                
+                const duration = 8 + Math.random() * 12;
+                const delay = Math.random() * 5;
+                snowflake.style.animationDuration = `${duration}s`;
+                snowflake.style.animationDelay = `${delay}s`;
+                
+                snowContainer.appendChild(snowflake);
+                
+                setTimeout(() => {
+                    if (snowflake.parentNode) {
+                        snowflake.remove();
+                        createSnowflake();
+                    }
+                }, (duration + delay) * 1000);
+            }
+        }
+
+        // Ice crystals animation
+        function initIceCrystals() {
+            const iceContainer = document.getElementById('ice-container');
+            const crystalCount = 6;
+            const crystals = ['❄️', '🧊', '⛄', '🌨️', '🏔️', '🎿'];
+            
+            for (let i = 0; i < crystalCount; i++) {
+                createIceCrystal();
+            }
+            
+            function createIceCrystal() {
+                const crystal = document.createElement('div');
+                crystal.classList.add('ice-crystal');
+                crystal.textContent = crystals[Math.floor(Math.random() * crystals.length)];
+                
+                const leftPos = 5 + Math.random() * 90;
+                crystal.style.left = `${leftPos}%`;
+                
+                const duration = 20 + Math.random() * 20;
+                const delay = Math.random() * 15;
+                crystal.style.animation = `floatIce ${duration}s linear ${delay}s infinite`;
+                
+                iceContainer.appendChild(crystal);
+            }
+        }
+
+        // Birthday countdown
+        function updateCountdown() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            
+            // Set birthday to December 8th
+            let nextBirthday = new Date(currentYear, 11, 8); // December is month 11
+            
+            // If birthday has already passed this year, set to next year
+            if (now > nextBirthday) {
+                nextBirthday = new Date(currentYear + 1, 11, 8);
+            }
+            
+            const timeDiff = nextBirthday - now;
+            
+            // Calculate days, hours, minutes, seconds
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+            
+            // Update display
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            
+            // Update total days
+            document.getElementById('total-days').textContent = `Keyingi tug'ilgan kunigacha: ${days} kun`;
+            
+            // Update next birthday date
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('next-birthday').textContent = 
+                `Keyingi tug'ilgan kun: ${nextBirthday.toLocaleDateString('uz-UZ', options)}`;
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initSnow();
+            initIceCrystals();
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        });
+    </script>
+</body>
+</html>

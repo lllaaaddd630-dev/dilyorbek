@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorite Music - Dilyorbek</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --spotify-green: #1DB954;
+            --spotify-black: #191414;
+            --spotify-dark: #121212;
+            --spotify-gray: #535353;
+            --spotify-light-gray: #b3b3b3;
+            --spotify-white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--spotify-dark) 0%, var(--spotify-black) 100%);
+            color: var(--spotify-white);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .music-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .music-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .music-header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--spotify-green), #1ed760);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .music-header p {
+            color: var(--spotify-light-gray);
+            font-size: 1.2rem;
+        }
+
+        /* Music List */
+        .music-list {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .song-item {
+            background: rgba(40, 40, 40, 0.8);
+            border-radius: 10px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .song-item:hover {
+            background: rgba(50, 50, 50, 0.9);
+            transform: translateY(-2px);
+            border-color: var(--spotify-green);
+        }
+
+        .song-item.active {
+            background: rgba(29, 185, 84, 0.1);
+            border-color: var(--spotify-green);
+        }
+
+        .song-cover {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .song-info {
+            flex: 1;
+        }
+
+        .song-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--spotify-white);
+        }
+
+        .song-artist {
+            color: var(--spotify-light-gray);
+            font-size: 0.9rem;
+        }
+
+        .song-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .play-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--spotify-green);
+            border: none;
+            color: var(--spotify-black);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            background: #1ed760;
+        }
+
+        .play-btn.playing {
+            background: #ff4d4d;
+        }
+
+        .play-btn.playing:hover {
+            background: #ff6666;
+        }
+
+        .progress-container {
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--spotify-gray);
+            border-radius: 2px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--spotify-green);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--spotify-light-gray);
+            margin-top: 0.3rem;
+        }
+
+        /* Player Controls */
+        .player-controls {
+            background: rgba(30, 30, 30, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            position: sticky;
+            bottom: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--spotify-gray);
+        }
+
+        .current-song {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .current-cover {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .current-info {
+            flex: 1;
+        }
+
+        .current-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .current-artist {
+            color: var(--spotify-light-gray);
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: var(--spotify-light-gray);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+        }
+
+        .control-btn:hover {
+            color: var(--spotify-white);
+            transform: scale(1.1);
+        }
+
+        .play-pause-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--spotify-green);
+            border: none;
+            color: var(--spotify-black);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-pause-btn:hover {
+            transform: scale(1.1);
+            background: #1ed760;
+        }
+
+        .main-progress {
+            width: 100%;
+            height: 6px;
+            background: var(--spotify-gray);
+            border-radius: 3px;
+            overflow: hidden;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+        }
+
+        .main-progress-bar {
+            height: 100%;
+            background: var(--spotify-green);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .main-time {
+            display: flex;
+            justify-content: space-between;
+            color: var(--spotify-light-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Back to Home */
+        .back-home {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .home-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            background: var(--spotify-green);
+            border: none;
+            border-radius: 50px;
+            color: var(--spotify-black);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            gap: 0.5rem;
+        }
+
+        .home-btn:hover {
+            background: #1ed760;
+            transform: translateY(-2px);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(29, 185, 84, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(29, 185, 84, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(29, 185, 84, 0);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .music-container {
+                padding: 1rem;
+            }
+
+            .music-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .song-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .song-controls {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .progress-container {
+                max-width: none;
+            }
+
+            .player-controls {
+                padding: 1.5rem;
+            }
+
+            .current-song {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .controls {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="music-container">
+        <!-- Header -->
+        <header class="music-header">
+            <h1><i class="fas fa-music"></i> Favorite Music</h1>
+            <p>Dilyorbek's Personal Music Collection</p>
+        </header>
+
+        <!-- Music List -->
+        <div class="music-list" id="musicList">
+            <!-- Songs will be added here dynamically -->
+        </div>
+
+        <!-- Player Controls -->
+        <div class="player-controls">
+            <div class="current-song">
+                <div class="current-cover">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div class="current-info">
+                    <div class="current-title" id="currentTitle">Select a song</div>
+                    <div class="current-artist" id="currentArtist">Artist</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn" id="prevBtn">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button class="play-pause-btn" id="playPauseBtn">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="control-btn" id="nextBtn">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+            </div>
+
+            <div class="main-progress">
+                <div class="main-progress-bar" id="mainProgressBar"></div>
+            </div>
+            <div class="main-time">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="back-home">
+            <a href="index.html" class="home-btn">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+        </div>
+    </div>
+
+    <!-- Hidden Audio Element -->
+    <audio id="audioPlayer"></audio>
+
+    <script>
+        // Music data - bu yerga o'zingizning music fayllaringizni qo'shasiz
+        const musicData = [
+            {
+                id: 1,
+                title: "Sample Song 1",
+                artist: "Unknown Artist",
+                src: "music/song1.mp3",
+                cover: "🎵"
+            },
+            {
+                id: 2,
+                title: "Sample Song 2",
+                artist: "Unknown Artist", 
+                src: "music/song2.mp3",
+                cover: "🎶"
+            },
+            {
+                id: 3,
+                title: "Sample Song 3",
+                artist: "Unknown Artist",
+                src: "music/song3.mp3",
+                cover: "🎧"
+            }
+        ];
+
+        // DOM Elements
+        const musicList = document.getElementById('musicList');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const currentTitle = document.getElementById('currentTitle');
+        const currentArtist = document.getElementById('currentArtist');
+        const mainProgressBar = document.getElementById('mainProgressBar');
+        const currentTime = document.getElementById('currentTime');
+        const duration = document.getElementById('duration');
+
+        let currentSongIndex = 0;
+        let isPlaying = false;
+
+        // Format time (seconds to mm:ss)
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Create song items
+        function createSongItems() {
+            musicData.forEach((song, index) => {
+                const songItem = document.createElement('div');
+                songItem.className = 'song-item';
+                songItem.innerHTML = `
+                    <div class="song-cover">${song.cover}</div>
+                    <div class="song-info">
+                        <div class="song-title">${song.title}</div>
+                        <div class="song-artist">${song.artist}</div>
+                    </div>
+                    <div class="song-controls">
+                        <button class="play-btn" data-index="${index}">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%"></div>
+                            </div>
+                            <div class="time-info">
+                                <span>0:00</span>
+                                <span>0:00</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                musicList.appendChild(songItem);
+            });
+        }
+
+        // Load and play song
+        function loadSong(index) {
+            const song = musicData[index];
+            audioPlayer.src = song.src;
+            currentTitle.textContent = song.title;
+            currentArtist.textContent = song.artist;
+            
+            // Update active song
+            document.querySelectorAll('.song-item').forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+        }
+
+        // Play/pause toggle
+        function togglePlay() {
+            if (audioPlayer.src) {
+                if (isPlaying) {
+                    audioPlayer.pause();
+                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                } else {
+                    audioPlayer.play();
+                    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                }
+                isPlaying = !isPlaying;
+                
+                // Update individual play buttons
+                document.querySelectorAll('.play-btn').forEach((btn, index) => {
+                    if (index === currentSongIndex) {
+                        btn.classList.toggle('playing', isPlaying);
+                        btn.innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
+                    } else {
+                        btn.classList.remove('playing');
+                        btn.innerHTML = '<i class="fas fa-play"></i>';
+                    }
+                });
+            }
+        }
+
+        // Next song
+        function nextSong() {
+            currentSongIndex = (currentSongIndex + 1) % musicData.length;
+            loadSong(currentSongIndex);
+            if (isPlaying) {
+                audioPlayer.play();
+            }
+        }
+
+        // Previous song
+        function prevSong() {
+            currentSongIndex = (currentSongIndex - 1 + musicData.length) % musicData.length;
+            loadSong(currentSongIndex);
+            if (isPlaying) {
+                audioPlayer.play();
+            }
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const { currentTime: ct, duration: dur } = audioPlayer;
+            if (dur) {
+                const progressPercent = (ct / dur) * 100;
+                mainProgressBar.style.width = `${progressPercent}%`;
+                currentTime.textContent = formatTime(ct);
+                duration.textContent = formatTime(dur);
+            }
+        }
+
+        // Set progress
+        function setProgress(e) {
+            const width = this.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audioPlayer.duration;
+            
+            audioPlayer.currentTime = (clickX / width) * duration;
+        }
+
+        // Event Listeners
+        playPauseBtn.addEventListener('click', togglePlay);
+        prevBtn.addEventListener('click', prevSong);
+        nextBtn.addEventListener('click', nextSong);
+        audioPlayer.addEventListener('timeupdate', updateProgress);
+        audioPlayer.addEventListener('ended', nextSong);
+        
+        document.querySelector('.main-progress').addEventListener('click', setProgress);
+
+        // Song item click events
+        musicList.addEventListener('click', (e) => {
+            const playBtn = e.target.closest('.play-btn');
+            if (playBtn) {
+                const index = parseInt(playBtn.dataset.index);
+                if (index !== currentSongIndex) {
+                    currentSongIndex = index;
+                    loadSong(index);
+                }
+                togglePlay();
+            }
+        });
+
+        // Initialize
+        createSongItems();
+        loadSong(0);
+
+        // Add some sample functionality for demonstration
+        console.log("Music player loaded! Add your music files to the 'music/' folder and update the musicData array.");
+    </script>
+</body>
+</html>
