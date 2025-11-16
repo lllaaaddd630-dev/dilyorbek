@@ -1,4 +1,4 @@
-import { Play, Pause, SkipBack, SkipForward, Music, Volume2, VolumeX } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Music, Volume2, VolumeX, Shuffle, Repeat, Repeat1 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
@@ -11,12 +11,16 @@ interface MusicPlayerProps {
   currentTime: number;
   volume: number;
   isMuted: boolean;
+  isShuffle: boolean;
+  repeatMode: "off" | "all" | "one";
   onPlayPause: () => void;
   onNext: () => void;
   onPrevious: () => void;
   onProgressClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   onVolumeChange: (volume: number) => void;
   onMuteToggle: () => void;
+  onShuffleToggle: () => void;
+  onRepeatToggle: () => void;
 }
 
 export function MusicPlayer({
@@ -26,12 +30,16 @@ export function MusicPlayer({
   currentTime,
   volume,
   isMuted,
+  isShuffle,
+  repeatMode,
   onPlayPause,
   onNext,
   onPrevious,
   onProgressClick,
   onVolumeChange,
   onMuteToggle,
+  onShuffleToggle,
+  onRepeatToggle,
 }: MusicPlayerProps) {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -55,11 +63,11 @@ export function MusicPlayer({
     : gradients[0];
 
   return (
-    <Card className="sticky bottom-4 md:bottom-8 p-6 md:p-8 backdrop-blur-xl bg-card/95 border-2">
+    <Card className="sticky bottom-4 md:bottom-8 p-6 md:p-8 backdrop-blur-xl bg-card/95 border-2 shadow-xl">
       {/* Current Song Info */}
       <div className="flex items-center gap-4 mb-6">
         <div
-          className={`w-20 h-20 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center flex-shrink-0`}
+          className={`w-20 h-20 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center flex-shrink-0 shadow-lg`}
           data-testid="img-player-cover"
         >
           <Music className="w-8 h-8 text-white" />
@@ -81,11 +89,27 @@ export function MusicPlayer({
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-center gap-4 md:gap-8 mb-6">
+      <div className="flex items-center justify-center gap-2 md:gap-4 mb-6">
+        <Button
+          size="icon"
+          variant={isShuffle ? "default" : "ghost"}
+          className={`rounded-full transition-all ${
+            isShuffle 
+              ? "bg-primary text-primary-foreground hover:bg-primary/90" 
+              : "hover:bg-primary/10"
+          }`}
+          onClick={onShuffleToggle}
+          disabled={!currentSong}
+          data-testid="button-shuffle"
+          title="Shuffle"
+        >
+          <Shuffle className="w-5 h-5" />
+        </Button>
+
         <Button
           size="lg"
           variant="ghost"
-          className="rounded-full"
+          className="rounded-full hover:bg-primary/10 transition-colors"
           onClick={onPrevious}
           disabled={!currentSong}
           data-testid="button-previous"
@@ -96,7 +120,7 @@ export function MusicPlayer({
         <Button
           size="lg"
           variant="default"
-          className="rounded-full min-h-16 min-w-16"
+          className="rounded-full min-h-16 min-w-16 hover:scale-105 transition-transform shadow-lg active:scale-95"
           onClick={onPlayPause}
           disabled={!currentSong}
           data-testid="button-main-play-pause"
@@ -111,24 +135,44 @@ export function MusicPlayer({
         <Button
           size="lg"
           variant="ghost"
-          className="rounded-full"
+          className="rounded-full hover:bg-primary/10 transition-colors"
           onClick={onNext}
           disabled={!currentSong}
           data-testid="button-next"
         >
           <SkipForward className="w-6 h-6" />
         </Button>
+
+        <Button
+          size="icon"
+          variant={repeatMode !== "off" ? "default" : "ghost"}
+          className={`rounded-full transition-all ${
+            repeatMode !== "off"
+              ? "bg-primary text-primary-foreground hover:bg-primary/90" 
+              : "hover:bg-primary/10"
+          }`}
+          onClick={onRepeatToggle}
+          disabled={!currentSong}
+          data-testid="button-repeat"
+          title={repeatMode === "one" ? "Repeat One" : repeatMode === "all" ? "Repeat All" : "Repeat Off"}
+        >
+          {repeatMode === "one" ? (
+            <Repeat1 className="w-5 h-5" />
+          ) : (
+            <Repeat className="w-5 h-5" />
+          )}
+        </Button>
       </div>
 
       {/* Progress Bar */}
       <div className="space-y-2">
         <div
-          className="h-1.5 bg-muted rounded-full overflow-hidden cursor-pointer hover-elevate"
+          className="h-1.5 bg-muted rounded-full overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
           onClick={onProgressClick}
           data-testid="progress-bar-main"
         >
           <div
-            className="h-full bg-primary transition-all duration-100"
+            className="h-full bg-primary transition-all duration-300 rounded-full"
             style={{ width: `${progress}%` }}
             data-testid="progress-bar-main-fill"
           />
@@ -143,7 +187,7 @@ export function MusicPlayer({
             <Button
               size="icon"
               variant="ghost"
-              className="flex-shrink-0"
+              className="flex-shrink-0 hover:bg-primary/10 transition-colors"
               onClick={onMuteToggle}
               data-testid="button-mute-toggle"
             >

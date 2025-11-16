@@ -1,4 +1,4 @@
-import { Music, Play, Pause } from "lucide-react";
+import { Music, Play, Pause, Heart } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { Song } from "@shared/schema";
@@ -8,8 +8,10 @@ interface SongCardProps {
   isPlaying: boolean;
   isCurrentSong: boolean;
   progress: number;
+  isLiked?: boolean;
   onPlayPause: () => void;
   onProgressClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onLikeToggle?: () => void;
 }
 
 export function SongCard({
@@ -17,8 +19,10 @@ export function SongCard({
   isPlaying,
   isCurrentSong,
   progress,
+  isLiked = false,
   onPlayPause,
   onProgressClick,
+  onLikeToggle,
 }: SongCardProps) {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -41,15 +45,19 @@ export function SongCard({
 
   return (
     <Card
-      className={`p-6 hover-elevate active-elevate-2 ${
-        isCurrentSong ? "border-primary" : ""
+      className={`p-6 hover-elevate active-elevate-2 transition-all duration-300 ${
+        isCurrentSong 
+          ? "border-primary shadow-lg shadow-primary/20 bg-primary/5" 
+          : "hover:border-primary/50"
       }`}
       data-testid={`card-song-${song.id}`}
     >
       <div className="flex items-center gap-6 flex-wrap md:flex-nowrap">
         {/* Album Cover */}
         <div
-          className={`w-[60px] h-[60px] rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center flex-shrink-0`}
+          className={`w-[60px] h-[60px] rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center flex-shrink-0 shadow-md transition-transform duration-300 ${
+            isCurrentSong && isPlaying ? "animate-pulse scale-105" : "hover:scale-105"
+          }`}
           data-testid={`img-cover-${song.id}`}
         >
           <Music className="w-6 h-6 text-white" />
@@ -58,7 +66,9 @@ export function SongCard({
         {/* Song Info */}
         <div className="flex-1 min-w-0">
           <h3
-            className="text-lg font-semibold text-foreground truncate"
+            className={`text-lg font-semibold truncate transition-colors ${
+              isCurrentSong ? "text-primary" : "text-foreground"
+            }`}
             data-testid={`text-title-${song.id}`}
           >
             {song.title}
@@ -72,12 +82,38 @@ export function SongCard({
         </div>
 
         {/* Controls */}
-        <div className="flex items-center gap-4 w-full md:w-auto">
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          {/* Like Button */}
+          {onLikeToggle && (
+            <Button
+              size="icon"
+              variant="ghost"
+              className={`rounded-full flex-shrink-0 transition-all ${
+                isLiked 
+                  ? "text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950" 
+                  : "hover:bg-primary/10"
+              }`}
+              onClick={(e) => {
+                e.stopPropagation();
+                onLikeToggle();
+              }}
+              data-testid={`button-like-${song.id}`}
+            >
+              <Heart 
+                className={`w-4 h-4 transition-all ${isLiked ? "fill-current" : ""}`} 
+              />
+            </Button>
+          )}
+
           {/* Play Button */}
           <Button
             size="icon"
-            variant={isPlaying && isCurrentSong ? "destructive" : "default"}
-            className="rounded-full flex-shrink-0"
+            variant={isPlaying && isCurrentSong ? "default" : "default"}
+            className={`rounded-full flex-shrink-0 transition-all ${
+              isPlaying && isCurrentSong 
+                ? "bg-primary hover:bg-primary/90 scale-110 shadow-lg shadow-primary/50" 
+                : "hover:scale-110"
+            }`}
             onClick={onPlayPause}
             data-testid={`button-play-${song.id}`}
           >
@@ -91,16 +127,22 @@ export function SongCard({
           {/* Progress Bar Container */}
           <div className="flex-1 min-w-[120px] md:min-w-[200px]">
             <div
-              className="h-1 bg-muted rounded-full overflow-hidden cursor-pointer hover-elevate"
+              className={`h-1.5 bg-muted rounded-full overflow-hidden cursor-pointer transition-all ${
+                isCurrentSong ? "hover:bg-muted/80" : ""
+              }`}
               onClick={onProgressClick}
               data-testid={`progress-bar-${song.id}`}
             >
               <div
-                className="h-full bg-primary transition-all duration-100"
+                className={`h-full transition-all duration-100 rounded-full ${
+                  isCurrentSong 
+                    ? "bg-gradient-to-r from-primary to-primary/80 shadow-sm" 
+                    : "bg-muted"
+                }`}
                 style={{ width: `${isCurrentSong ? progress : 0}%` }}
               />
             </div>
-            <div className="flex justify-between mt-1 text-xs text-muted-foreground">
+            <div className="flex justify-between mt-1.5 text-xs text-muted-foreground">
               <span data-testid={`text-current-time-${song.id}`}>
                 {isCurrentSong ? formatTime((song.duration * progress) / 100) : "0:00"}
               </span>

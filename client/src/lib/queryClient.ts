@@ -29,7 +29,17 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    const res = await fetch(queryKey.join("/") as string, {
+    // Ensure we have a proper URL - if it starts with api/, use the backend URL
+    // otherwise join the queryKey parts
+    let url: string;
+    if (queryKey.length === 1 && typeof queryKey[0] === 'string' && queryKey[0].startsWith('api/')) {
+      url = `http://localhost:5000/${queryKey[0]}`;
+    } else {
+      // For absolute URLs or other cases, join the queryKey parts
+      url = queryKey.join("/");
+    }
+    
+    const res = await fetch(url, {
       credentials: "include",
     });
 

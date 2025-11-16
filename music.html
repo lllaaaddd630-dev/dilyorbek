@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dilyorbek - Music Collection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+80s+Fade&family=Rubik+Glitch&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --blue: #4A90E2;
+            --blue-light: #87CEEB;
+            --blue-dark: #2C5AA0;
+            --bg-primary: #E8F4F8;
+            --bg-secondary: #F0F8FF;
+            --text-primary: #2C5AA0;
+            --text-secondary: #555;
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --player-bg: #2C5AA0;
+            --player-text: #FFFFFF;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0a1929;
+            --bg-secondary: #132f4c;
+            --text-primary: #e3f2fd;
+            --text-secondary: #bbdefb;
+            --card-bg: rgba(19, 47, 76, 0.9);
+            --player-bg: #1a365d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--blue);
+        }
+
+        .page-title {
+            font-family: 'Rubik 80s Fade', cursive;
+            font-size: 2.5rem;
+            color: var(--blue-dark);
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, var(--blue), var(--blue-light));
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.5);
+        }
+
+        .back-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .song-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(74, 144, 226, 0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .song-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(74, 144, 226, 0.4);
+        }
+
+        .album-cover {
+            height: 200px;
+            background: linear-gradient(135deg, var(--blue), var(--blue-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .album-cover i {
+            font-size: 4rem;
+            color: white;
+            opacity: 0.7;
+        }
+
+        .song-info {
+            padding: 1.5rem;
+        }
+
+        .song-title {
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .song-artist {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .song-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(74, 144, 226, 0.2);
+        }
+
+        .song-duration {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .play-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue), var(--blue-light));
+            border: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Music Player */
+        .music-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--player-bg);
+            color: var(--player-text);
+            padding: 1rem 2rem;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .player-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .current-song {
+            display: flex;
+            align-items: center;
+            width: 30%;
+        }
+
+        .current-cover {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--blue-light), var(--blue));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+
+        .current-cover i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .song-details h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .song-details p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .player-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 40%;
+        }
+
+        .control-buttons {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: var(--player-text);
+            font-size: 1rem;
+            margin: 0 0.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .control-btn.main {
+            background: white;
+            color: var(--player-bg);
+            width: 50px;
+            height: 50px;
+        }
+
+        .control-btn.main:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .time {
+            font-size: 0.8rem;
+            width: 40px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .progress {
+            height: 100%;
+            background: white;
+            border-radius: 3px;
+            width: 30%;
+        }
+
+        .player-options {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            width: 30%;
+        }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+            width: 120px;
+        }
+
+        .volume-icon {
+            margin-right: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .volume-slider {
+            flex: 1;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .volume-level {
+            height: 100%;
+            background: white;
+            border-radius: 3px;
+            width: 70%;
+        }
+
+        @media (max-width: 768px) {
+            .music-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1.5rem;
+            }
+            
+            .player-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .current-song, .player-controls, .player-options {
+                width: 100%;
+            }
+            
+            .control-buttons {
+                margin-bottom: 1rem;
+            }
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #fff;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            color: #ff6b6b;
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="page-title">Music Collection</h1>
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </header>
+
+        <div id="musicContent">
+            <div class="spinner" id="loadingSpinner"></div>
+        </div>
+    </div>
+
+    <!-- Music Player -->
+    <div class="music-player">
+        <div class="player-content">
+            <div class="current-song">
+                <div class="current-cover">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div class="song-details">
+                    <h4>Select a song to play</h4>
+                    <p>No song playing</p>
+                </div>
+            </div>
+            
+            <div class="player-controls">
+                <div class="control-buttons">
+                    <button class="control-btn">
+                        <i class="fas fa-random"></i>
+                    </button>
+                    <button class="control-btn">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button class="control-btn main">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="control-btn">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                    <button class="control-btn">
+                        <i class="fas fa-repeat"></i>
+                    </button>
+                </div>
+                
+                <div class="progress-container">
+                    <span class="time">0:00</span>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                    <span class="time">0:00</span>
+                </div>
+            </div>
+            
+            <div class="player-options">
+                <div class="volume-container">
+                    <i class="fas fa-volume-up volume-icon"></i>
+                    <div class="volume-slider">
+                        <div class="volume-level"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const musicContent = document.getElementById('musicContent');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const mainPlayBtn = document.querySelector('.control-btn.main');
+        const playIcon = mainPlayBtn.querySelector('i');
+        
+        // Current playing song
+        let currentSong = null;
+        let isPlaying = false;
+        
+        // Fetch songs from API
+        async function fetchSongs() {
+            try {
+                const response = await fetch('http://localhost:5000/api/music');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                renderMusicCards(data.songs);
+            } catch (error) {
+                console.error('Error fetching songs:', error);
+                musicContent.innerHTML = `
+                    <div class="error-message">
+                        <h3>Error Loading Music</h3>
+                        <p>Failed to load music collection. Please make sure the server is running.</p>
+                        <p>Error: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Render music cards
+        function renderMusicCards(songs) {
+            if (songs.length === 0) {
+                musicContent.innerHTML = `
+                    <div class="error-message">
+                        <h3>No Songs Found</h3>
+                        <p>Your music collection is empty. Add some songs to get started!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '<div class="music-grid">';
+            
+            songs.forEach(song => {
+                html += `
+                    <div class="song-card" data-id="${song.id}">
+                        <div class="album-cover" style="background: linear-gradient(135deg, #${Math.floor(Math.random()*16777215).toString(16)}, #${Math.floor(Math.random()*16777215).toString(16)})">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="song-info">
+                            <h3 class="song-title">${song.title}</h3>
+                            <p class="song-artist">${song.artist}</p>
+                            <div class="song-meta">
+                                <span class="song-duration">${song.duration}</span>
+                                <button class="play-btn" data-id="${song.id}">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            musicContent.innerHTML = html;
+            
+            // Add event listeners to play buttons
+            document.querySelectorAll('.play-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const songId = this.getAttribute('data-id');
+                    playSong(songId);
+                });
+            });
+            
+            // Add event listeners to song cards
+            document.querySelectorAll('.song-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Only play if not clicking on the play button itself
+                    if (!e.target.closest('.play-btn')) {
+                        const songId = this.getAttribute('data-id');
+                        playSong(songId);
+                    }
+                });
+            });
+        }
+        
+        // Play song function
+        async function playSong(songId) {
+            try {
+                const response = await fetch(`http://localhost:5000/api/music/${songId}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const song = await response.json();
+                
+                // Update player UI
+                document.querySelector('.current-song .song-details h4').textContent = song.title;
+                document.querySelector('.current-song .song-details p').textContent = song.artist;
+                document.querySelector('.current-cover').style.background = `linear-gradient(135deg, #${Math.floor(Math.random()*16777215).toString(16)}, #${Math.floor(Math.random()*16777215).toString(16)})`;
+                
+                // Set current song
+                currentSong = song;
+                isPlaying = true;
+                
+                // Change play button to pause
+                playIcon.className = 'fas fa-pause';
+                
+                // Update listen count
+                fetch(`http://localhost:5000/api/music/listen/${songId}`, {
+                    method: 'PATCH'
+                }).catch(err => console.error('Error updating listen count:', err));
+                
+            } catch (error) {
+                console.error('Error playing song:', error);
+                alert(`Error playing song: ${error.message}`);
+            }
+        }
+        
+        // Toggle play/pause
+        mainPlayBtn.addEventListener('click', function() {
+            if (!currentSong) {
+                alert('Please select a song first');
+                return;
+            }
+            
+            if (isPlaying) {
+                playIcon.className = 'fas fa-play';
+                isPlaying = false;
+            } else {
+                playIcon.className = 'fas fa-pause';
+                isPlaying = true;
+            }
+        });
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchSongs();
+        });
+    </script>
+</body>
+</html>

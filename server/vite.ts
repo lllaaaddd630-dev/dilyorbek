@@ -40,9 +40,47 @@ export async function setupVite(app: Express, server: Server) {
     appType: "custom",
   });
 
+  // Serve React app for /playlist route (BEFORE vite middlewares)
+  app.get("/playlist", async (req, res) => {
+    log(`[vite] Handling /playlist route`, "vite");
+    try {
+      const clientTemplate = path.resolve(
+        import.meta.dirname,
+        "..",
+        "client",
+        "index.html",
+      );
+      
+      if (!fs.existsSync(clientTemplate)) {
+        log(`[vite] Client template not found: ${clientTemplate}`, "vite");
+        return res.status(404).send("Client template not found");
+      }
+      
+      let template = await fs.promises.readFile(clientTemplate, "utf-8");
+      template = template.replace(
+        `src="/src/main.tsx"`,
+        `src="/src/main.tsx?v=${nanoid()}`,
+      );
+      const page = await vite.transformIndexHtml(req.originalUrl, template);
+      log(`[vite] Successfully served /playlist`, "vite");
+      res.status(200).set({ "Content-Type": "text/html" }).end(page);
+    } catch (e) {
+      log(`[vite] Error serving /playlist: ${e}`, "vite");
+      vite.ssrFixStacktrace(e as Error);
+      res.status(500).send(`Internal Server Error: ${e}`);
+    }
+  });
+
+  // Use vite middlewares for static assets (JS, CSS, images, etc.)
   app.use(vite.middlewares);
+  
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
+    
+    // Skip if this is root path, /playlist, or API/music routes (let them be handled by other routes)
+    if (url === "/" || url === "" || url === "/playlist" || url.startsWith("/api") || url.startsWith("/music")) {
+      return next();
+    }
 
     try {
       const clientTemplate = path.resolve(

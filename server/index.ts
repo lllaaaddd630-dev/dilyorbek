@@ -2,6 +2,11 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
+// Set default NODE_ENV to 'development' if not set (for Windows PowerShell compatibility)
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = 'development';
+}
+
 const app = express();
 
 declare module 'http' {
@@ -73,8 +78,8 @@ app.use((req, res, next) => {
   const port = parseInt(process.env.PORT || '5000', 10);
   server.listen({
     port,
-    host: "0.0.0.0",
-    reusePort: true,
+    host: "localhost",
+    reusePort: false,
   }, () => {
     log(`serving on port ${port}`);
   });
